@@ -1,5 +1,6 @@
 *.crx
 *.pem
+*.xpi
 .idea/
 __pycache__/
 chromedriver
