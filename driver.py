@@ -28,9 +28,9 @@ class SeleniumC():
             self.resize()
 
     #This method ensures we find a given identifier on the page, retrying n times
-    def try_n_times(self, n, identifier, by=By.ID, timeout=10):
+    def await(self, n, identifier, by=By.ID, timeout=10):
         for i in range(n):
-            elem = WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located(by, identifier))
+            elem = WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located((by, identifier)))
             if elem is not None:
                 return True
             else:
