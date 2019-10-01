@@ -17,10 +17,15 @@ class SeleniumC():
         self.jq = self.load_jQuery()
         self.display = self.virtual_display()
 
+        self.page_counter = 0
+
     def get(self, url, jq=True):
         self.driver.get(url)
         if jq:
             self.driver.execute_script(self.jq)
+        self.page_counter += 1
+        if self.page_counter > self.config['RESIZE_LIMIT']:
+            self.resize()
 
     #This method ensures we find a given identifier on the page, retrying n times
     def try_n_times(self, n, identifier, by=By.ID, timeout=10):
@@ -49,10 +54,19 @@ class SeleniumC():
         else:
             return None
 
+    def resize(self, width=None, height=None):
+        self.page_counter = 0
+        if width is None:
+            width = randint(*self.config['WIDTH'])
+        if height is None:
+            height = randint(*self.config['HEIGHT'])
+        self.driver.set_window_size(width, height)
+
     def close(self):
         self.driver.close()
         if self.display is not None:
             self.display.stop()
+
 
 
 

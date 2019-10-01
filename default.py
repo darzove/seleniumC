@@ -9,9 +9,10 @@ config = {
     #widths and heights are important for window resizing as well as virtual display settings
     'WIDTH': (480, 1920), #(min,max)
     'HEIGHT': (360, 1080), #(min,max)
+    'RESIZE_LIMIT': 15, #how often to resize browser window
     'JQ_PATH': None,
     'JQ_URL': 'https://code.jquery.com/jquery-3.4.1.min.js',
     'ADBLOCK': True,
     'ADBLOCK_XPI': None,
-    'ADBLOCK_CRX': os.path.join(base_dir, '3.6.3_0.crx')
+    'ADBLOCK_CRX': os.path.join(base_dir, '1.22.4_0.crx')
 }
