@@ -9,6 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from urllib.request import urlopen
 from random import randint
+from time import sleep
 
 class SeleniumC():
     def __init__(self, config):
@@ -20,21 +21,38 @@ class SeleniumC():
         self.page_counter = 0
 
     def get(self, url, jq=True):
+        if self.config['VERBOSE']:
+            print(f"GETTING {url}")
+
+        if self.config['DELETE_COOKIES']:
+            self.driver.delete_all_cookies()
+
         self.driver.get(url)
+
         if jq:
             self.driver.execute_script(self.jq)
+
         self.page_counter += 1
         if self.page_counter > self.config['RESIZE_LIMIT']:
             self.resize()
 
+        sleep(randint(*self.config['SLEEP_RANGE']))
+
     #This method ensures we find a given identifier on the page, retrying n times
-    def await(self, n, identifier, by=By.ID, timeout=10):
+    def wait_for(self, n, identifier, by=By.ID, timeout=10):
         for i in range(n):
-            elem = WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located((by, identifier)))
-            if elem is not None:
-                return True
-            else:
+            if self.config['VERBOSE']:
+                print(f"Try {i} of {n} waiting on {identifier}")
+            try:
+                elem = WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located((by, identifier)))
+                if elem is not None:
+                    return True
+                else:
+                    continue
+            except:
                 continue
+        if self.config['VERBOSE']:
+            print(f'Failed to find element {identifier}')
         return False
 
     #loads jQuery as a resource if/when it is needed.
@@ -48,8 +66,10 @@ class SeleniumC():
     #If we aren't running headless and don't have a monitor, we can still scrape!
     def virtual_display(self):
         if self.config['VIRTUAL'] and not self.config['HEADLESS']:
+            if self.config['VERBOSE']:
+                print('STARTING VIRTUAL DISPLAY')
             from pyvirtualdisplay import Display
-            size = (randint(self.config['WIDTH']), randint(self.config['HEIGHT']))
+            size = (randint(*self.config['WIDTH']), randint(*self.config['HEIGHT']))
             return Display(visible=0, size=size).start()
         else:
             return None
@@ -60,9 +80,13 @@ class SeleniumC():
             width = randint(*self.config['WIDTH'])
         if height is None:
             height = randint(*self.config['HEIGHT'])
+        if self.config['VERBOSE']:
+            print(f'Set window size to {width}x{height}')
         self.driver.set_window_size(width, height)
 
     def close(self):
+        if self.config['VERBOSE']:
+            print('Closing. Goodbye!')
         self.driver.close()
         if self.display is not None:
             self.display.stop()

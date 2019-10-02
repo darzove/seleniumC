@@ -14,5 +14,8 @@ config = {
     'JQ_URL': 'https://code.jquery.com/jquery-3.4.1.min.js',
     'ADBLOCK': True,
     'ADBLOCK_XPI': None,
-    'ADBLOCK_CRX': os.path.join(base_dir, '1.22.4_0.crx')
+    'ADBLOCK_CRX': os.path.join(base_dir, '1.22.4_0.crx'),
+    "SLEEP_RANGE": (2,7), #amount of time to sleep for after each get (randint range)
+    "DELETE_COOKIES": True, #delete cookies on each get?
+    "VERBOSE": True
 }

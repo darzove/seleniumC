@@ -1,6 +1,6 @@
 from selenium import webdriver
-from seleniumC.driver import SeleniumC
-from seleniumC.default import config
+from driver import SeleniumC
+from default import config
 import json
 
 class Chrome(SeleniumC):
