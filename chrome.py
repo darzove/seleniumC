@@ -37,4 +37,4 @@ class Chrome(SeleniumC):
         return res.get('value')
 
     def inject(self, script):
-        self.send_command('Page.addScriptToEvaluateOnNewDocument', {"source": script})
+        self.send_command("Page.addScriptToEvaluateOnNewDocument", {"source": script})

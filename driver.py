@@ -51,8 +51,6 @@ class SeleniumC():
     #This method ensures we find a given identifier on the page, retrying n times
     def wait_for(self, identifier, n=2, by=By.ID, timeout=10):
         for i in range(n):
-            if self.config['VERBOSE']:
-                print(f"Try {i+1} of {n+1} waiting on {identifier}")
             try:
                 elem = WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located((by, identifier)))
                 if elem is not None:
