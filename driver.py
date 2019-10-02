@@ -7,6 +7,7 @@ virtual display for headless mode (if running on a box), etc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 from urllib.request import urlopen
 from random import randint
 from time import sleep
@@ -17,7 +18,7 @@ class SeleniumC():
         self.driver = None
         self.jq = self.load_jQuery()
         self.display = self.virtual_display()
-
+        self.on_page_load = None
         self.page_counter = 0
 
     def get(self, url, jq=True):
@@ -27,22 +28,31 @@ class SeleniumC():
         if self.config['DELETE_COOKIES']:
             self.driver.delete_all_cookies()
 
-        self.driver.get(url)
+        try:
+            self.driver.get(url)
+        except TimeoutException:
+            if self.config['VERBOSE']:
+                print(f'Timeout attempting to get {url}')
+            return False
 
         if jq:
             self.driver.execute_script(self.jq)
+
+        if self.on_page_load is not None:
+            self.driver.execute_script(self.on_page_load)
 
         self.page_counter += 1
         if self.page_counter > self.config['RESIZE_LIMIT']:
             self.resize()
 
         sleep(randint(*self.config['SLEEP_RANGE']))
+        return True
 
     #This method ensures we find a given identifier on the page, retrying n times
-    def wait_for(self, n, identifier, by=By.ID, timeout=10):
+    def wait_for(self, identifier, n=2, by=By.ID, timeout=10):
         for i in range(n):
             if self.config['VERBOSE']:
-                print(f"Try {i} of {n} waiting on {identifier}")
+                print(f"Try {i+1} of {n+1} waiting on {identifier}")
             try:
                 elem = WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located((by, identifier)))
                 if elem is not None:
