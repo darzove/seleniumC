@@ -21,7 +21,8 @@ class SeleniumC():
         self.on_page_load = None
         self.page_counter = 0
 
-    def get(self, url, jq=True):
+    def get(self, url):
+        jq = self.config['AUTO_INJECT_JQ']
         if self.config['VERBOSE']:
             print(f"GETTING {url}")
 

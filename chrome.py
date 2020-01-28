@@ -17,6 +17,9 @@ class Chrome(SeleniumC):
         for arg in self.config['ARGS']:
             options.add_argument(arg)
 
+        if self.config['PREFS']:
+            options.add_experimental_option('prefs', self.config['PREFS'])
+
         #AFAIK headless still doesnt work with extensions, although I have heard some tomfoolery on the matter
         if not self.config['HEADLESS'] and self.config['ADBLOCK'] and self.config['ADBLOCK_CRX'] is not None:
             options.add_extension(self.config['ADBLOCK_CRX'])

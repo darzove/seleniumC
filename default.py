@@ -10,6 +10,7 @@ config = {
     'WIDTH': (480, 1920), #(min,max)
     'HEIGHT': (360, 1080), #(min,max)
     'RESIZE_LIMIT': 15, #how often to resize browser window
+    'AUTO_INJECT_JQ': True,
     'JQ_PATH': None,
     'JQ_URL': 'https://code.jquery.com/jquery-3.4.1.min.js',
     'ADBLOCK': True,
@@ -17,5 +18,6 @@ config = {
     'ADBLOCK_CRX': None,
     "SLEEP_RANGE": (2,7), #amount of time to sleep for after each get (randint range)
     "DELETE_COOKIES": True, #delete cookies on each get?
-    "VERBOSE": True
+    "VERBOSE": True,
+    'PREFS': None
 }
