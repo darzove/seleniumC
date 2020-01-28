@@ -19,5 +19,7 @@ config = {
     "SLEEP_RANGE": (2,7), #amount of time to sleep for after each get (randint range)
     "DELETE_COOKIES": True, #delete cookies on each get?
     "VERBOSE": True,
-    'PREFS': None
+    'PREFS': None,
+    "PROXY": False,
+    "PROXY_HOST": None
 }

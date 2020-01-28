@@ -24,6 +24,9 @@ class Chrome(SeleniumC):
         if not self.config['HEADLESS'] and self.config['ADBLOCK'] and self.config['ADBLOCK_CRX'] is not None:
             options.add_extension(self.config['ADBLOCK_CRX'])
 
+        if self.config['PROXY'] and self.config['PROXY_STRING'] is not None:
+            options.add_argument(f'--proxy-server=http://{self.config["PROXY_STRING"]}')
+
         if self.config['BINARY_PATH'] is not None:
             return webdriver.Chrome(chrome_options=options, executable_path=self.config['BINARY_PATH'])
         else:
